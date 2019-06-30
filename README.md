@@ -116,14 +116,14 @@ public function updateProduct(Product $product)
 ```
 
 Request body example:
-```json
+```js
 {
     "name": "Car",
     "description": "",
     "tags": [
       
     ],
-    //....................
+    /*-----------------------*/
 }
 ```
 
