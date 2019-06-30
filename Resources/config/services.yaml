@@ -1,0 +1,15 @@
+services:
+  Vangrg\RequestMapperBundle\Mapper\RequestMapperInterface: '@Vangrg\RequestMapperBundle\Mapper\RequestMapper'
+
+  Vangrg\RequestMapperBundle\Mapper\RequestMapper:
+    public: false
+    arguments:
+      - '@Symfony\Component\Serializer\SerializerInterface'
+
+  Vangrg\RequestMapperBundle\Annotation\Driver\RequestParamMapperDriver:
+    arguments:
+      - '@Vangrg\RequestMapperBundle\Mapper\RequestMapperInterface'
+      - '@Doctrine\Common\Annotations\Reader'
+      - '@Symfony\Component\Validator\Validator\ValidatorInterface'
+    tags:
+      - { name: kernel.event_subscriber }

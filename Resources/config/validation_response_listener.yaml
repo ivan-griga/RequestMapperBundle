@@ -1,0 +1,6 @@
+services:
+  Vangrg\RequestMapperBundle\EventListener\ValidationResponseListener:
+    arguments:
+      - '@Symfony\Component\Serializer\SerializerInterface'
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception }
