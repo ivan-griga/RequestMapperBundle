@@ -94,6 +94,10 @@ Request example: `/products?name=car&sortDirection=DESC`
 If you want to update an existed object (**PUT**, **PATCH**) you can use `@ParamConverter` to get object from the database and `@RequestParamMapper` to map data from request to this object. 
 
 ```php
+use Vangrg\RequestMapperBundle\Annotation\RequestParamMapper;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 /**
  * @Rest\Put("/products/{id}")
  *
@@ -116,14 +120,14 @@ public function updateProduct(Product $product)
 ```
 
 Request body example:
-```json
+```js
 {
     "name": "Car",
     "description": "",
     "tags": [
-      
+      /*-------------*/
     ],
-    ....................
+/*-------------------*/
 }
 ```
 
