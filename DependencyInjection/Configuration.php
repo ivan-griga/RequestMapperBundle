@@ -15,7 +15,13 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('vangrg_request_mapper');
 
-        $treeBuilder->getRootNode()
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            $rootNode = $treeBuilder->root('vangrg_request_mapper');
+        }
+
+        $rootNode
             ->children()
                 ->arrayNode('validation_response')
                     ->canBeDisabled()
