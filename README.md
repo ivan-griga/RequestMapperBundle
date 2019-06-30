@@ -1,12 +1,12 @@
 # API request mapper bundle
 
-This small Bundle provides tools for easy map and validate request data. 
+This small Bundle provides tools for easy map and validate request data (instead of using Symfony forms). 
 
-One annotation allow you to work with all types of data (query parameters or request body parameters) and build the same "400" response structures for all actions. In controller you receive a valid object.
+One annotation allow you to work with all types of data (query parameters or request body parameters) and build the same 400 response structures for all actions. In controller you receive a valid object.
 
 This bundle uses **symfony serializer** for handling request.
 
-Good for building of APIs.
+**Good for building of APIs**.
 
 ## Installation
 
@@ -43,7 +43,7 @@ vangrg_request_mapper:
   validation_response:
     enabled: true # Enable or disable validation error response listener(default: true)
                   # If disabled then ValidationException will be thrown for not valid request data
-    format: 'json' # Validation response format. json or xml
+    format: 'json' # Validation response format (json or xml)
 ```
 
 ## Usage
@@ -87,6 +87,7 @@ class FilterDto
     // ...  
 }
 ```
+Request example: `/products?name=car&sortDirection=DESC`
 
 #### Combine with `@ParamConverter`
 
@@ -111,6 +112,18 @@ public function updateProduct(Product $product)
     $this->getDoctrine()->getManager()->flush();
     
     return $product;
+}
+```
+
+Request body example:
+```json
+{
+    "name": "Car",
+    "description": "",
+    "tags": [
+      
+    ],
+    ....................
 }
 ```
 
