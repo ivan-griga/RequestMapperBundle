@@ -4,8 +4,8 @@ namespace Vangrg\RequestMapperBundle\EventListener;
 
 use Vangrg\RequestMapperBundle\Exception\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -19,9 +19,13 @@ class ValidationResponseListener
     /** @var SerializerInterface */
     private $serializer;
 
-    public function __construct(SerializerInterface $serializer)
+    /** @var string */
+    private $responseFormat;
+
+    public function __construct(SerializerInterface $serializer, string $responseFormat)
     {
         $this->serializer = $serializer;
+        $this->responseFormat = $responseFormat;
     }
 
     /**
@@ -73,10 +77,20 @@ class ValidationResponseListener
      * @param array $response
      * @param int   $statusCode
      *
-     * @return JsonResponse
+     * @return Response
      */
     private function getResponse(array $response, int $statusCode)
     {
-        return JsonResponse::fromJsonString($this->serializer->serialize($response, 'json'), $statusCode);
+        $content = $this->serializer->serialize($response, $this->responseFormat);
+
+        $response = new Response($content, $statusCode);
+
+        $mimeTypes = Request::getMimeTypes($this->responseFormat);
+
+        if (count($mimeTypes) > 0) {
+            $response->headers->set('Content-Type', $mimeTypes[0]);
+        }
+
+        return $response;
     }
 }

@@ -2,7 +2,7 @@
     "name": "vangrg/request-mapper-bundle",
     "type": "symfony-bundle",
     "description": "This Bundle provides tools for easy mapping request data to your model. Good for fast building of APIs.",
-    "keywords": ["api", "REST", "request", "mapper", "body converter", "query mapper"],
+    "keywords": ["api", "REST", "request", "mapper", "body converter", "query mapper", "param fetcher"],
     "license": "MIT",
     "authors": [
         {

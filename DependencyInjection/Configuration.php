@@ -4,6 +4,7 @@ namespace Vangrg\RequestMapperBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * Class Configuration.
@@ -17,7 +18,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
                 ->arrayNode('validation_response')
-                    ->canBeEnabled()
+                    ->canBeDisabled()
                     ->beforeNormalization()
                         ->ifArray()->then(function ($v) {
                             if (!empty($v)) {
@@ -27,6 +28,12 @@ class Configuration implements ConfigurationInterface
 
                                 if (!isset($v['format'])) {
                                     $v['format'] = 'json';
+                                }
+
+                                if (!in_array($v['format'], ['json', 'xml'])) {
+                                    throw new InvalidConfigurationException(
+                                        'Invalid response format in vangrg_request_mapper.validation_response.format, valid formats: "json", "xml".'
+                                    );
                                 }
                             }
 

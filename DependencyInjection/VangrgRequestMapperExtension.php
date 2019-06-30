@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Vangrg\RequestMapperBundle\EventListener\ValidationResponseListener;
 
 /**
  * Class VangrgRequestMapperExtension.
@@ -29,6 +30,10 @@ class VangrgRequestMapperExtension extends Extension
         if ($config['validation_response']['enabled']) {
 
             $loader->load('validation_response_listener.yaml');
+
+            $definition = $container->getDefinition(ValidationResponseListener::class);
+
+            $definition->replaceArgument(1, $config['validation_response']['format']);
         }
     }
 }
