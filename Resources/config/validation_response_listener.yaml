@@ -1,5 +1,7 @@
 services:
-  Vangrg\RequestMapperBundle\EventListener\ValidationResponseListener:
+  vangrg.request_mapper.prepare_validation_response:
+    class: Vangrg\RequestMapperBundle\EventListener\ValidationResponseListener
+    public: false
     arguments:
       - '@Symfony\Component\Serializer\SerializerInterface'
       -

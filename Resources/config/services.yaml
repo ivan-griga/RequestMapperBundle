@@ -6,7 +6,9 @@ services:
     arguments:
       - '@Symfony\Component\Serializer\SerializerInterface'
 
-  Vangrg\RequestMapperBundle\Annotation\Driver\RequestParamMapperDriver:
+  vangrg.request_mapper.annotation_driver:
+    class: Vangrg\RequestMapperBundle\Annotation\Driver\RequestParamMapperDriver
+    public: false
     arguments:
       - '@Vangrg\RequestMapperBundle\Mapper\RequestMapperInterface'
       - '@Doctrine\Common\Annotations\Reader'
