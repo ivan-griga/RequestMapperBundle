@@ -5,6 +5,7 @@ services:
     public: false
     arguments:
       - '@Symfony\Component\Serializer\SerializerInterface'
+      - '@Symfony\Component\EventDispatcher\EventDispatcherInterface'
 
   vangrg.request_mapper.annotation_driver:
     class: Vangrg\RequestMapperBundle\Annotation\Driver\RequestParamMapperDriver
@@ -13,5 +14,6 @@ services:
       - '@Vangrg\RequestMapperBundle\Mapper\RequestMapperInterface'
       - '@Doctrine\Common\Annotations\Reader'
       - '@Symfony\Component\Validator\Validator\ValidatorInterface'
+      - '@Symfony\Component\EventDispatcher\EventDispatcherInterface'
     tags:
       - { name: kernel.event_subscriber }

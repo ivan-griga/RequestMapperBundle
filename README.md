@@ -131,11 +131,63 @@ Request body example:
 }
 ```
 
-All annotation parameters:
+#### All annotation parameters:
 
  - `class` - class name for mapping.
  - `deserializationContext` - deserialization context of **symfony serializer**
  - `toExistedObject` - set to **true** if you want map data to existed object. Default - **false**
  - `validate` - enable or disable validation after data inserting. Default - **true**
  - `validationGroups` - validation groups
+ 
+Events
+======
 
+The following is a list of events you can listen to:
+
+| Event name | Trigger point|
+|------------|--------------|
+|`vangrg_request_mapper.configuration`|allow dynamic reconfiguration before mapping|
+|`vangrg_request_mapper.before_normalize`|possibility to change data before normalization to the object|
+
+#### Example
+
+```php
+<?php
+
+namespace App\EventListener;
+
+use Vangrg\RequestMapperBundle\Event\ConfigurationEvent;
+use Vangrg\RequestMapperBundle\Event\BeforeNormalizeEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class FooSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents()
+    {
+        return [
+            ConfigurationEvent::NAME => [
+                ['onReadConfiguration'],
+            ],
+            BeforeNormalizeEvent::NAME => [
+                ['modifyMappedData'],
+            ],            
+        ];
+    }
+    public function onReadConfiguration(ConfigurationEvent $event)
+    {
+        $configuration = $event->getConfiguration();
+
+        // do your something
+    }
+
+    public function modifyMappedData(BeforeNormalizeEvent $event)
+    {
+        $data = $event->getData();
+        
+        // do something
+        // $data['start'] = (integer) $data['start'];
+        
+        $event->setData($data);
+    }
+}
+```
