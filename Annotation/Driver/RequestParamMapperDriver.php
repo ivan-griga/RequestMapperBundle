@@ -7,6 +7,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
+use Vangrg\RequestMapperBundle\Event\ConfigurationEvent;
 use Vangrg\RequestMapperBundle\Mapper\RequestMapperInterface;
 use Vangrg\RequestMapperBundle\Annotation\RequestParamMapper;
 use Vangrg\RequestMapperBundle\Exception\ValidationException;
@@ -30,12 +33,15 @@ class RequestParamMapperDriver implements EventSubscriberInterface
     /** @var RequestParamMapper|false */
     private $configuration;
 
+    /** @var EventDispatcherInterface */
+    private $dispatcher;
+
     public static function getSubscribedEvents()
     {
         return [
             KernelEvents::CONTROLLER => [
                 ['prepareConfig', 9999],
-                ['mapControllerParam', -9999],
+                ['mapRequestData', -9999],
             ],
         ];
     }
@@ -43,11 +49,13 @@ class RequestParamMapperDriver implements EventSubscriberInterface
     public function __construct(
         RequestMapperInterface $requestMapper,
         Reader $reader,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        EventDispatcherInterface $dispatcher
     ) {
         $this->requestMapper = $requestMapper;
         $this->reader = $reader;
         $this->validator = $validator;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -70,6 +78,14 @@ class RequestParamMapperDriver implements EventSubscriberInterface
             return;
         }
 
+        $configurationEvent = new ConfigurationEvent($this->configuration, $event->getRequest());
+
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($configurationEvent, ConfigurationEvent::NAME);
+        } else {
+            $this->dispatcher->dispatch(ConfigurationEvent::NAME, $configurationEvent);
+        }
+
         if (!isset($this->configuration->param, $this->configuration->class)) {
             throw new \LogicException(sprintf(
                 "No configured annotation options 'param' or 'class' for '%s' action in '%s'",
@@ -86,7 +102,7 @@ class RequestParamMapperDriver implements EventSubscriberInterface
     /**
      * @param FilterControllerEvent $event
      */
-    public function mapControllerParam(FilterControllerEvent $event)
+    public function mapRequestData(FilterControllerEvent $event)
     {
         if (false == $this->configuration) {
             return;
