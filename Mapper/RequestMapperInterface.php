@@ -13,10 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 interface RequestMapperInterface
 {
     /**
-     * Map all the properties from $request to $toClass. Return a new object.
+     * Map all request properties using RequestParamMapper config.
+     * Return an object.
      *
      * @param Request $request
-     * @param string $toClass
+     * @param RequestParamMapper $toClass
      *
      * @return mixed
      */

@@ -6,7 +6,7 @@ One annotation allow you to work with all types of data (query parameters or req
 
 This bundle uses **symfony serializer** for handling request.
 
-**Good for building of APIs**.
+**Good for develop RESTful API's.**.
 
 ## Installation
 
@@ -48,7 +48,15 @@ vangrg_request_mapper:
 
 ## Usage
 
-The  `@RequestParamMapper` annotation calls service to map request data to object. This object is stored as request attribute and can be injected as controller method argument:
+The  `@RequestParamMapper` annotation calls service to map request data to object. This object is stored as request attribute and can be injected as controller method argument.
+
+#### All annotation parameters:
+
+ - `class` - class name for mapping.
+ - `deserializationContext` - deserialization context of **symfony serializer**
+ - `toExistedObject` - set to **true** if you want map data to existed object. Default - **false**
+ - `validate` - enable or disable validation after data inserting. Default - **true**
+ - `validationGroups` - validation groups
 
 ```php
 use Vangrg\RequestMapperBundle\Annotation\RequestParamMapper;
@@ -130,14 +138,6 @@ Request body example:
 /*-------------------*/
 }
 ```
-
-#### All annotation parameters:
-
- - `class` - class name for mapping.
- - `deserializationContext` - deserialization context of **symfony serializer**
- - `toExistedObject` - set to **true** if you want map data to existed object. Default - **false**
- - `validate` - enable or disable validation after data inserting. Default - **true**
- - `validationGroups` - validation groups
  
 Events
 ======
