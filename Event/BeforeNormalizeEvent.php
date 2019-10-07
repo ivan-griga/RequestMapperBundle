@@ -14,19 +14,13 @@ final class BeforeNormalizeEvent extends Event
 {
     const NAME = 'vangrg_request_mapper.before_normalize';
 
-    /**
-     * @var RequestParamMapper
-     */
+    /** @var RequestParamMapper */
     protected $configuration;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $data;
 
     public function __construct(RequestParamMapper $configuration, Request $request)
